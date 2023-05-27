@@ -1,0 +1,18 @@
+versiol
+  services:
+    sychugovka-netology-db:
+      image: postgres: latest
+      container_name: sychugovka-netology-db
+      ports:
+       - 5432:5432
+      volumes:
+       - ./pg_data:/var/1ib/postgresql/data/pgdata
+      environment:
+        POSTGRES_PASSWORD: sychugovkal2!3
+        POSTGRES_DB: sychugovka_db
+        PGDATA: /var/lib/postgresql/data/pgdata
+
+      networks:
+       sychugovka-my-netology-hw:
+        ipv4_address: 172.22.0.2
+      restart: always

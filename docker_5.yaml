@@ -1,0 +1,26 @@
+zabbix_wgui:
+   image: zabbix/zabbix-web-apache-pgsql
+   links:
+     - sychugovka-netology-db
+     - zabbix-server
+   container_name: sychugovka-zabbix-frontend-real
+   environment:
+     DB_SERVER_HOST: 172.22.0.2
+     POSTGRES_USER: postgres
+     POSTGRES_PASSWORD: sychugovka12!3!!
+     ZBX_SERVER_HOST: zabbix_server
+     PHP_TZ: "Europe/Moscow"
+   ports:
+    - 80:8080
+    - 443:8443
+   networks:
+    sychugovka-my-netology-hw:
+     ipv4_address: 172.22.0.5
+   restart: always
+
+networks:
+ sychugovka-my-netology-hw:
+  driver: bridge
+  ipam:
+   config:
+   - subnet: 172.22.0.0/24

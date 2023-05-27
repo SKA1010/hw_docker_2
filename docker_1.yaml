@@ -1,0 +1,8 @@
+version: "3"
+services:
+networks:
+ sychugovka-my-netology-hw:
+  driver: bridge
+  ipam:
+   config:
+   - subnet: 172.22.0.0/24

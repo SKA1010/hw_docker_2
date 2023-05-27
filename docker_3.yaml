@@ -1,0 +1,12 @@
+pgadmin:
+    image: dpage/pgadmin4
+    container_name: sychugovka-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: sychugovka@ilove-netology.com
+      PGADMIN_DEFAULT_PASSWORD: 12345
+    networks:
+      sychugovka-my-netology-hw:
+        ipv4_address: 172.22.0.3
+    ports:
+     - 61231:80
+    restart: always

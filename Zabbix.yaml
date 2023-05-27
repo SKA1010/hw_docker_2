@@ -1,0 +1,73 @@
+version: "3"
+services:
+ sychugovka-netology-db:
+  image: postgres:latest
+  container_name: sychugovka-netology-db
+  ports:
+   - 5432:5432
+  volumes:
+   - ./pg_data:/var/lib/postgresql/data/pgdata
+  environment:
+    POSTGRES_PASSWORD: sychugovka12!3!!
+    POSTGRES_DB: sychugovka_db
+    PGDATA: /var/lib/postgresql/data/pgdata
+
+  networks:
+   sychugovka-my-netology-hw:
+    ipv4_address: 172.22.0.2
+  restart: always
+
+ pgadmin:
+    image: dpage/pgadmin4
+    container_name: sychugovka-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: sychugovka@ilove-netology.com
+      PGADMIN_DEFAULT_PASSWORD: 12345
+    networks:
+      sychugovka-my-netology-hw:
+        ipv4_address: 172.22.0.3
+    ports:
+     - 61231:80
+    restart: always
+ zabbix-server:
+    image: zabbix/zabbix-server-pgsql
+    links:
+      - sychugovka-netology-db
+    container_name: sychugovka-zabbix-frontend
+    environment:
+      DB_SERVER_HOST: 172.22.0.2
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sychugovka12!3!!
+    ports:
+      - 10051:10051
+    networks:
+      sychugovka-my-netology-hw:
+        ipv4_address: 172.22.0.4
+    restart: always
+
+ zabbix_wgui:
+   image: zabbix/zabbix-web-apache-pgsql
+   links:
+     - sychugovka-netology-db
+     - zabbix-server
+   container_name: sychugovka-zabbix-frontend-real
+   environment:
+     DB_SERVER_HOST: 172.22.0.2
+     POSTGRES_USER: postgres
+     POSTGRES_PASSWORD: sychugovka12!3!!
+     ZBX_SERVER_HOST: zabbix_server
+     PHP_TZ: "Europe/Moscow"
+   ports:
+    - 80:8080
+    - 443:8443
+   networks:
+    sychugovka-my-netology-hw:
+     ipv4_address: 172.22.0.5
+   restart: always
+
+networks:
+ sychugovka-my-netology-hw:
+  driver: bridge
+  ipam:
+   config:
+   - subnet: 172.22.0.0/24
